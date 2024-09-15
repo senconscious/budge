@@ -8,8 +8,11 @@ defmodule BudgeWeb.PlanComponents do
   end
 
   def current_month do
-    %{month: month} = Date.utc_today()
-    Enum.at(@months, month - 1)
+    Enum.at(@months, Date.utc_today().month - 1)
+  end
+
+  def current_year do
+    Date.utc_today().year
   end
 
   def index_page(assigns) do
@@ -34,14 +37,8 @@ defmodule BudgeWeb.PlanComponents do
     <.form for={@form} phx-change="validate" phx-submit="create">
       <div class="box-border p-1 border-2">
         <div class="flex">
-          <.input type="number" placeholder="year" field={@form[:year]} />
-          <.input
-            type="select"
-            placeholder="month"
-            options={months()}
-            value={current_month()}
-            field={@form[:month]}
-          />
+          <.input type="number" placeholder="year" value={current_year()} field={@form[:year]} />
+          <.input type="select" options={months()} value={current_month()} field={@form[:month]} />
         </div>
         <.incomes form={@form} />
         <.expenses form={@form} />
