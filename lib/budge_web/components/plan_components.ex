@@ -1,6 +1,17 @@
 defmodule BudgeWeb.PlanComponents do
   use BudgeWeb, :component
 
+  @months ~w(january february march april may june july august september october november december)
+
+  def months do
+    @months
+  end
+
+  def current_month do
+    %{month: month} = Date.utc_today()
+    Enum.at(@months, month - 1)
+  end
+
   def index_page(assigns) do
     ~H"""
     <.link navigate={~p"/plans/new"}>Create New Plan</.link>
@@ -9,7 +20,9 @@ defmodule BudgeWeb.PlanComponents do
       <:failed :let={_failure}>there was an error loading the plans</:failed>
       <.table id="plans" rows={plans} row_click={fn plan -> JS.navigate(~p"/plans/#{plan.id}") end}>
         <:col :let={plan} label="Id"><%= plan.id %></:col>
-        <:col :let={plan} label="Year and Month"><%= "#{plan.year}/#{plan.month}" %></:col>
+        <:col :let={plan} label="Year and Month">
+          <%= format_year_month(plan.year, plan.month) %>
+        </:col>
         <:col :let={plan} label="Rest"><%= plan.rest %></:col>
       </.table>
     </.async_result>
@@ -22,7 +35,13 @@ defmodule BudgeWeb.PlanComponents do
       <div class="box-border p-1 border-2">
         <div class="flex">
           <.input type="number" placeholder="year" field={@form[:year]} />
-          <.input type="number" placeholder="month" field={@form[:month]} />
+          <.input
+            type="select"
+            placeholder="month"
+            options={months()}
+            value={current_month()}
+            field={@form[:month]}
+          />
         </div>
         <.incomes form={@form} />
         <.expenses form={@form} />
@@ -33,6 +52,11 @@ defmodule BudgeWeb.PlanComponents do
       </div>
     </.form>
     """
+  end
+
+  defp format_year_month(year, month) do
+    formatted_month = month |> Atom.to_string() |> String.capitalize()
+    "#{formatted_month} #{year}"
   end
 
   def delete_button(assigns) do
