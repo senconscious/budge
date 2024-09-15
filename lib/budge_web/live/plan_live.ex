@@ -18,7 +18,7 @@ defmodule BudgeWeb.PlanLive do
       <% :new -> %>
         <.new_page form={@form} />
       <% :show -> %>
-        <.new_page form={@form} />
+        <.update_page form={@form} />
     <% end %>
     """
   end
@@ -63,7 +63,7 @@ defmodule BudgeWeb.PlanLive do
   end
 
   def handle_event(
-        "create",
+        "save",
         %{"plan_schema" => params},
         %{assigns: %{live_action: :new}} = socket
       ) do
@@ -73,7 +73,7 @@ defmodule BudgeWeb.PlanLive do
   end
 
   def handle_event(
-        "create",
+        "save",
         %{"plan_schema" => params},
         %{assigns: %{live_action: :show}} = socket
       ) do

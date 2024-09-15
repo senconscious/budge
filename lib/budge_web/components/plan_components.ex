@@ -34,11 +34,30 @@ defmodule BudgeWeb.PlanComponents do
 
   def new_page(assigns) do
     ~H"""
-    <.form for={@form} phx-change="validate" phx-submit="create">
+    <.form for={@form} phx-change="validate" phx-submit="save">
       <div class="box-border p-1 border-2">
         <div class="flex">
           <.input type="number" placeholder="year" value={current_year()} field={@form[:year]} />
           <.input type="select" options={months()} value={current_month()} field={@form[:month]} />
+        </div>
+        <.incomes form={@form} />
+        <.expenses form={@form} />
+        <div class="mt-2">
+          <.button type="submit">Save</.button>
+          <.link navigate={~p"/plans"}>Return</.link>
+        </div>
+      </div>
+    </.form>
+    """
+  end
+
+  def update_page(assigns) do
+    ~H"""
+    <.form for={@form} phx-change="validate" phx-submit="save">
+      <div class="box-border p-1 border-2">
+        <div class="flex">
+          <.input type="number" placeholder="year" field={@form[:year]} />
+          <.input type="select" options={months()} field={@form[:month]} />
         </div>
         <.incomes form={@form} />
         <.expenses form={@form} />
