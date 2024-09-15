@@ -33,6 +33,32 @@ defmodule BudgeWeb.PlanComponents do
     """
   end
 
+  def delete_button(assigns) do
+    ~H"""
+    <.button
+      type="button"
+      name={"plan_schema[#{@key}_drop][]"}
+      value={@index}
+      phx-click={JS.dispatch("change")}
+    >
+      ❌
+    </.button>
+    """
+  end
+
+  def add_button(assigns) do
+    ~H"""
+    <.button
+      type="button"
+      name={"plan_schema[#{@key}_sort][]"}
+      value="new"
+      phx-click={JS.dispatch("change")}
+    >
+      +
+    </.button>
+    """
+  end
+
   def incomes(assigns) do
     ~H"""
     <div class="box-border mt-5 p-1 border-4">
@@ -40,30 +66,16 @@ defmodule BudgeWeb.PlanComponents do
       <.inputs_for :let={income} field={@form[:incomes]}>
         <div class="box-border mt-2 p-1 border-4">
           <input type="hidden" name="plan_schema[incomes_sort][]" value={income.index} />
-          <.input type="text" placeholder="name" field={income[:name]} />
+          <div class="flex">
+            <.input type="text" placeholder="name" field={income[:name]} />
+            <.delete_button index={income.index} key="incomes" />
+          </div>
           <.input type="number" placeholder="value" field={income[:value]} />
-        </div>
-        <div class="mt-2">
-          <.button
-            type="button"
-            name="plan_schema[incomes_drop][]"
-            value={income.index}
-            phx-click={JS.dispatch("change")}
-          >
-            -
-          </.button>
         </div>
       </.inputs_for>
       <input type="hidden" name="plan_schema[incomes_drop][]" />
 
-      <.button
-        type="button"
-        name="plan_schema[incomes_sort][]"
-        value="new"
-        phx-click={JS.dispatch("change")}
-      >
-        +
-      </.button>
+      <.add_button key="incomes" />
     </div>
     """
   end
@@ -75,31 +87,17 @@ defmodule BudgeWeb.PlanComponents do
       <.inputs_for :let={expense} field={@form[:expenses]}>
         <div class="box-border mt-2 p-1 border-4">
           <input type="hidden" name="plan_schema[expenses_sort][]" value={expense.index} />
-          <.input type="text" placeholder="name" field={expense[:name]} />
+          <div class="flex">
+            <.input type="text" placeholder="name" field={expense[:name]} />
+            <.delete_button index={expense.index} key="expenses" />
+          </div>
           <.input type="select" options={["flat", "percentage"]} field={expense[:unit]} />
           <.input type="number" placeholder="value" field={expense[:value]} />
-        </div>
-        <div class="mt-2">
-          <.button
-            type="button"
-            name="plan_schema[expenses_drop][]"
-            value={expense.index}
-            phx-click={JS.dispatch("change")}
-          >
-            -
-          </.button>
         </div>
       </.inputs_for>
       <input type="hidden" name="plan_schema[expenses_drop][]" />
 
-      <.button
-        type="button"
-        name="plan_schema[expenses_sort][]"
-        value="new"
-        phx-click={JS.dispatch("change")}
-      >
-        +
-      </.button>
+      <.add_button key="expenses" />
     </div>
     """
   end
