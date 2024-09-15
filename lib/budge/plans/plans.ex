@@ -9,6 +9,7 @@ defmodule Budge.Plans do
   alias Budge.Plans.ChangePlanBuilder
 
   alias Budge.Plans.PlanQuery
+  alias Budge.Plans.PlanTemplateQuery
 
   defdelegate new_plan(attrs), to: NewPlanBuilder, as: :call
   defdelegate change_plan(plan, attrs), to: ChangePlanBuilder, as: :call
@@ -17,4 +18,5 @@ defmodule Budge.Plans do
   defdelegate fetch_plan(id), to: PlanQuery, as: :fetch
   defdelegate update_plan(id, attrs), to: UpdatePlanCommand, as: :execute
   defdelegate delete_plan(id), to: DeletePlanCommand, as: :execute
+  defdelegate load_plan_template(od), to: PlanTemplateQuery, as: :fetch!
 end

@@ -27,8 +27,62 @@ defmodule BudgeWeb.PlanComponents do
           <%= format_year_month(plan.year, plan.month) %>
         </:col>
         <:col :let={plan} label="Rest"><%= plan.rest %></:col>
+        <:col :let={plan}><.plan_actions plan_id={plan.id} /></:col>
       </.table>
     </.async_result>
+    """
+  end
+
+  def plan_actions(assigns) do
+    ~H"""
+    <div class="flex gap-2 items-center justify-end">
+      <.import_plan_button plan_id={@plan_id} />
+      <.tooltip postfix_id={"import-#{@plan_id}"} text="Use as template" />
+      <.delete_plan_button plan_id={@plan_id} />
+      <.tooltip postfix_id={"delete-#{@plan_id}"} text="Delete" />
+    </div>
+    """
+  end
+
+  def import_plan_button(assigns) do
+    ~H"""
+    <button
+      data-tooltip-target={"delete-tooltip-#{@plan_id}"}
+      data-tooltip-placement="top"
+      type="button"
+      class="w-12 h-12"
+      value={@plan_id}
+      phx-click="new"
+    >
+      🗒️
+    </button>
+    """
+  end
+
+  def delete_plan_button(assigns) do
+    ~H"""
+    <button
+      data-tooltip-target={"delete-tooltip-#{@plan_id}"}
+      data-tooltip-placement="top"
+      type="button"
+      class="w-12 h-12"
+      value={@plan_id}
+    >
+      ❌
+    </button>
+    """
+  end
+
+  def tooltip(assigns) do
+    ~H"""
+    <div
+      id={"tooltip-#{@postfix_id}"}
+      role="tooltip"
+      class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+    >
+      <%= @text %>
+      <div class="tooltip-arrow" data-popper-arrow></div>
+    </div>
     """
   end
 

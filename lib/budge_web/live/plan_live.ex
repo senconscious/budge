@@ -30,8 +30,11 @@ defmodule BudgeWeb.PlanLive do
   end
 
   def mount(_, _session, %{assigns: %{live_action: :new}} = socket) do
+    params = load_new_params(socket)
+
     socket
-    |> load_new_form()
+    |> load_new_form(params)
+    |> assign(:template_id, nil)
     |> wrap_ok()
   end
 
@@ -40,6 +43,19 @@ defmodule BudgeWeb.PlanLive do
     |> load_plan(id)
     |> load_change_form()
     |> wrap_ok()
+  end
+
+  def handle_params(_params, _url, %{assigns: %{live_action: :new}} = socket) do
+    params = load_new_params(socket)
+
+    socket
+    |> load_new_form(params)
+    |> assign(:template_id, nil)
+    |> wrap_noreply()
+  end
+
+  def handle_params(_, _, socket) do
+    wrap_noreply(socket)
   end
 
   def handle_event(
@@ -82,6 +98,13 @@ defmodule BudgeWeb.PlanLive do
     |> wrap_noreply()
   end
 
+  def handle_event("new", %{"value" => id}, socket) do
+    socket
+    |> assign(:template_id, String.to_integer(id))
+    |> push_patch(to: ~p"/plans/new")
+    |> wrap_noreply()
+  end
+
   defp load_plans(socket) do
     connected? = connected?(socket)
     action = socket.assigns.live_action
@@ -92,7 +115,15 @@ defmodule BudgeWeb.PlanLive do
   defp maybe_load_plans(true, :index), do: Budge.Plans.list_plans()
   defp maybe_load_plans(_, _), do: []
 
-  defp load_new_form(socket, params \\ @default_create_form_params) do
+  defp load_new_params(%{assigns: %{template_id: id}}) when is_integer(id) do
+    Budge.Plans.load_plan_template(id)
+  end
+
+  defp load_new_params(_socket) do
+    @default_create_form_params
+  end
+
+  defp load_new_form(socket, params) do
     form =
       params
       |> Budge.Plans.new_plan()
