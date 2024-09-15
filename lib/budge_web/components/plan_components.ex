@@ -90,14 +90,16 @@ defmodule BudgeWeb.PlanComponents do
 
   def add_button(assigns) do
     ~H"""
-    <.button
-      type="button"
-      name={"plan_schema[#{@key}_sort][]"}
-      value="new"
-      phx-click={JS.dispatch("change")}
-    >
-      +
-    </.button>
+    <div class="flex justify-center">
+      <.button
+        type="button"
+        name={"plan_schema[#{@key}_sort][]"}
+        value="new"
+        phx-click={JS.dispatch("change")}
+      >
+        <%= @text %>
+      </.button>
+    </div>
     """
   end
 
@@ -117,7 +119,7 @@ defmodule BudgeWeb.PlanComponents do
       </.inputs_for>
       <input type="hidden" name="plan_schema[incomes_drop][]" />
 
-      <.add_button key="incomes" />
+      <.add_button key="incomes" text="Add new income" />
     </div>
     """
   end
@@ -139,7 +141,7 @@ defmodule BudgeWeb.PlanComponents do
       </.inputs_for>
       <input type="hidden" name="plan_schema[expenses_drop][]" />
 
-      <.add_button key="expenses" />
+      <.add_button key="expenses" text="Add new expense" />
     </div>
     """
   end
