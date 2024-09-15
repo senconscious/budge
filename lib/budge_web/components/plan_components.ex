@@ -40,8 +40,11 @@ defmodule BudgeWeb.PlanComponents do
           <.input type="number" placeholder="year" value={current_year()} field={@form[:year]} />
           <.input type="select" options={months()} value={current_month()} field={@form[:month]} />
         </div>
+        <div class="box-border border-t-4 mt-2"></div>
         <.incomes form={@form} />
+        <div class="box-border border-t-4 mt-2"></div>
         <.expenses form={@form} />
+        <div class="box-border border-t-4 mt-2"></div>
         <.form_bottom />
       </div>
     </.form>
@@ -51,13 +54,16 @@ defmodule BudgeWeb.PlanComponents do
   def update_page(assigns) do
     ~H"""
     <.form for={@form} phx-change="validate" phx-submit="save">
-      <div class="flex flex-col justify-between box-border p-1 border-2">
+      <div class="flex flex-col justify-between box-border border-2">
         <div class="flex">
           <.input type="number" placeholder="year" field={@form[:year]} />
           <.input type="select" options={months()} field={@form[:month]} />
         </div>
+        <div class="box-border border-t-4 mt-2"></div>
         <.incomes form={@form} />
+        <div class="box-border border-t-4 mt-2"></div>
         <.expenses form={@form} />
+        <div class="box-border border-t-4 mt-2"></div>
         <.form_bottom />
       </div>
     </.form>
@@ -71,14 +77,15 @@ defmodule BudgeWeb.PlanComponents do
 
   def delete_button(assigns) do
     ~H"""
-    <.button
+    <button
       type="button"
       name={"plan_schema[#{@key}_drop][]"}
       value={@index}
       phx-click={JS.dispatch("change")}
+      class="w-10 h-10 mt-2"
     >
       ❌
-    </.button>
+    </button>
     """
   end
 
@@ -89,6 +96,7 @@ defmodule BudgeWeb.PlanComponents do
         type="button"
         name={"plan_schema[#{@key}_sort][]"}
         value="new"
+        class="p-0"
         phx-click={JS.dispatch("change")}
       >
         <%= @text %>
@@ -99,18 +107,23 @@ defmodule BudgeWeb.PlanComponents do
 
   def incomes(assigns) do
     ~H"""
-    <div class="box-border mt-5 p-1 border-4">
+    <div class="flex flex-col justify-between gap-3 mt-5">
       <p>Incomes</p>
-      <.inputs_for :let={income} field={@form[:incomes]}>
-        <div class="box-border mt-2 p-1 border-4">
-          <input type="hidden" name="plan_schema[incomes_sort][]" value={income.index} />
-          <div class="flex">
-            <.input type="text" placeholder="name" field={income[:name]} />
-            <.delete_button index={income.index} key="incomes" />
+      <div>
+        <.inputs_for :let={income} field={@form[:incomes]}>
+          <div class="flex flex-col">
+            <input type="hidden" name="plan_schema[incomes_sort][]" value={income.index} />
+            <div class="flex">
+              <div class="flex justify-between">
+                <.input type="text" placeholder="name" field={income[:name]} />
+                <.input type="number" placeholder="value" field={income[:value]} />
+              </div>
+              <.delete_button index={income.index} key="incomes" />
+            </div>
+            <div class="box-border border-t-4 mt-2"></div>
           </div>
-          <.input type="number" placeholder="value" field={income[:value]} />
-        </div>
-      </.inputs_for>
+        </.inputs_for>
+      </div>
       <input type="hidden" name="plan_schema[incomes_drop][]" />
 
       <.add_button key="incomes" text="Add new income" />
@@ -120,19 +133,24 @@ defmodule BudgeWeb.PlanComponents do
 
   def expenses(assigns) do
     ~H"""
-    <div class="box-border mt-5 p-1 border-4">
+    <div class="flex flex-col justify-between gap-3 mt-5">
       <p>Expenses</p>
-      <.inputs_for :let={expense} field={@form[:expenses]}>
-        <div class="box-border mt-2 p-1 border-4">
-          <input type="hidden" name="plan_schema[expenses_sort][]" value={expense.index} />
-          <div class="flex">
-            <.input type="text" placeholder="name" field={expense[:name]} />
-            <.delete_button index={expense.index} key="expenses" />
+      <div class="flex flex-col justify-between gap-3">
+        <.inputs_for :let={expense} field={@form[:expenses]}>
+          <div class="flex flex-col justify-between">
+            <input type="hidden" name="plan_schema[expenses_sort][]" value={expense.index} />
+            <div class="flex">
+              <.input type="text" placeholder="name" field={expense[:name]} />
+              <.delete_button index={expense.index} key="expenses" />
+            </div>
+            <div class="flex">
+              <.input type="select" options={["flat", "percentage"]} field={expense[:unit]} />
+              <.input type="number" placeholder="value" field={expense[:value]} />
+            </div>
           </div>
-          <.input type="select" options={["flat", "percentage"]} field={expense[:unit]} />
-          <.input type="number" placeholder="value" field={expense[:value]} />
-        </div>
-      </.inputs_for>
+          <div class="box-border border-t-4 mt-2"></div>
+        </.inputs_for>
+      </div>
       <input type="hidden" name="plan_schema[expenses_drop][]" />
 
       <.add_button key="expenses" text="Add new expense" />
