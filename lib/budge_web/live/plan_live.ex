@@ -105,6 +105,16 @@ defmodule BudgeWeb.PlanLive do
     |> wrap_noreply()
   end
 
+  def handle_event("delete", %{"value" => id}, socket) do
+    id
+    |> String.to_integer()
+    |> Budge.Plans.delete_plan()
+
+    socket
+    |> push_navigate(to: ~p"/plans")
+    |> wrap_noreply()
+  end
+
   defp load_plans(socket) do
     connected? = connected?(socket)
     action = socket.assigns.live_action

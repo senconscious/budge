@@ -67,6 +67,7 @@ defmodule BudgeWeb.PlanComponents do
       type="button"
       class="w-12 h-12"
       value={@plan_id}
+      phx-click="delete"
     >
       ❌
     </button>
