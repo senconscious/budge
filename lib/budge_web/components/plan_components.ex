@@ -36,9 +36,12 @@ defmodule BudgeWeb.PlanComponents do
     ~H"""
     <.form for={@form} phx-change="validate" phx-submit="save">
       <div class="flex flex-col justify-between box-border p-1 border-2">
-        <div class="flex">
-          <.input type="number" placeholder="year" value={current_year()} field={@form[:year]} />
-          <.input type="select" options={months()} value={current_month()} field={@form[:month]} />
+        <div class="flex flex-row justify-between">
+          <div class="flex">
+            <.input type="select" options={months()} value={current_month()} field={@form[:month]} />
+            <.input type="number" placeholder="year" value={current_year()} field={@form[:year]} />
+          </div>
+          <.input type="number" placeholder="Current rest" disabled={true} field={@form[:rest]} />
         </div>
         <div class="box-border border-t-4 mt-2"></div>
         <.incomes form={@form} />
@@ -55,9 +58,12 @@ defmodule BudgeWeb.PlanComponents do
     ~H"""
     <.form for={@form} phx-change="validate" phx-submit="save">
       <div class="flex flex-col justify-between box-border border-2">
-        <div class="flex">
-          <.input type="number" placeholder="year" field={@form[:year]} />
-          <.input type="select" options={months()} field={@form[:month]} />
+        <div class="flex flex-row justify-between">
+          <div class="flex">
+            <.input type="select" options={months()} field={@form[:month]} />
+            <.input type="number" placeholder="year" field={@form[:year]} />
+          </div>
+          <.input type="number" placeholder="Current rest" disabled={true} field={@form[:rest]} />
         </div>
         <div class="box-border border-t-4 mt-2"></div>
         <.incomes form={@form} />

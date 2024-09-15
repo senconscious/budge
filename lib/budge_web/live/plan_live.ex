@@ -126,14 +126,14 @@ defmodule BudgeWeb.PlanLive do
   defp create_plan(socket, params) do
     case Budge.Plans.create_plan(params) do
       {:ok, _} -> push_navigate(socket, to: ~p"/plans")
-      {:error, _, changeset, _} -> assign(socket, :form, to_form(changeset))
+      {:error, changeset} -> assign(socket, :form, to_form(changeset))
     end
   end
 
   defp update_plan(%{assigns: %{plan: %{id: plan_id}}} = socket, params) do
     case Budge.Plans.update_plan(plan_id, params) do
       {:ok, _} -> push_navigate(socket, to: ~p"/plans")
-      {:error, _, changeset, _} -> assign(socket, :form, to_form(changeset))
+      {:error, changeset} -> assign(socket, :form, to_form(changeset))
     end
   end
 

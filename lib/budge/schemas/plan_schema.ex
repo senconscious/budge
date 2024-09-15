@@ -55,5 +55,17 @@ defmodule Budge.PlanSchema do
     |> unique_constraint([:year, :month], error_key: :month)
     |> check_constraint(:month, name: "month_is_valid")
     |> check_constraint(:year, name: "year_is_supported")
+    |> update_rest()
+  end
+
+  defp update_rest(changeset) do
+    put_change(changeset, :rest, maybe_calculate_rest(changeset))
+  end
+
+  defp maybe_calculate_rest(changeset) do
+    case apply_action(changeset, :insert) do
+      {:ok, plan} -> Budge.Plans.PlanRestCalculation.call(plan)
+      {:error, _} -> 0
+    end
   end
 end
