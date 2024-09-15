@@ -42,10 +42,7 @@ defmodule BudgeWeb.PlanComponents do
         </div>
         <.incomes form={@form} />
         <.expenses form={@form} />
-        <div class="mt-2">
-          <.button type="submit">Save</.button>
-          <.link navigate={~p"/plans"}>Return</.link>
-        </div>
+        <.form_bottom />
       </div>
     </.form>
     """
@@ -61,10 +58,7 @@ defmodule BudgeWeb.PlanComponents do
         </div>
         <.incomes form={@form} />
         <.expenses form={@form} />
-        <div class="mt-2">
-          <.button type="submit">Save</.button>
-          <.link navigate={~p"/plans"}>Return</.link>
-        </div>
+        <.form_bottom />
       </div>
     </.form>
     """
@@ -142,6 +136,15 @@ defmodule BudgeWeb.PlanComponents do
       <input type="hidden" name="plan_schema[expenses_drop][]" />
 
       <.add_button key="expenses" text="Add new expense" />
+    </div>
+    """
+  end
+
+  def form_bottom(assigns) do
+    ~H"""
+    <div class="mt-2">
+      <.button type="submit">Save</.button>
+      <.link navigate={~p"/plans"}>Return</.link>
     </div>
     """
   end
