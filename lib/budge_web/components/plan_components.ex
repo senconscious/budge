@@ -158,11 +158,26 @@ defmodule BudgeWeb.PlanComponents do
     """
   end
 
+  def return_button(assigns) do
+    ~H"""
+    <button
+      type="button"
+      class={[
+        "phx-submit-loading:opacity-75 rounded-lg bg-red-900 hover:bg-red-700 py-2 px-3",
+        "text-sm font-semibold leading-6 text-white active:text-white/80"
+      ]}
+      phx-click={JS.navigate(~p"/plans")}
+    >
+      Return
+    </button>
+    """
+  end
+
   def form_bottom(assigns) do
     ~H"""
-    <div class="mt-2">
+    <div class="flex justify-around mt-2">
       <.button type="submit">Save</.button>
-      <.link navigate={~p"/plans"}>Return</.link>
+      <.return_button />
     </div>
     """
   end
