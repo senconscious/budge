@@ -20,8 +20,10 @@ defmodule BudgeWeb.PlanComponents do
     ~H"""
     <.form for={@form} phx-change="validate" phx-submit="create">
       <div class="box-border p-1 border-2">
-        <.input type="number" placeholder="year" field={@form[:year]} />
-        <.input type="number" placeholder="month" field={@form[:month]} />
+        <div class="flex">
+          <.input type="number" placeholder="year" field={@form[:year]} />
+          <.input type="number" placeholder="month" field={@form[:month]} />
+        </div>
         <.incomes form={@form} />
         <.expenses form={@form} />
         <div class="mt-2">
